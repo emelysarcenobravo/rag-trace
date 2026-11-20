@@ -1,3 +1,5 @@
+from fastapi import HTTPException
+from app.db.database import test_connection
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,3 +27,21 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "healthy"}
+
+
+@app.get("/health/db")
+def database_health():
+    try:
+        version = test_connection()
+
+        return {
+            "status": "connected",
+            "database": "PostgreSQL",
+            "version": version
+        }
+
+    except Exception as error:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Database connection failed: {str(error)}"
+        )
