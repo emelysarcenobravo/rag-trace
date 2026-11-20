@@ -23,9 +23,8 @@ def test_connection():
     """
     Test the database connection.
     """
-    with get_connection() as connection:
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT version();")
-            result = cursor.fetchone()
+    with get_connection() as connection, connection.cursor() as cursor:
+        cursor.execute("SELECT version();")
+        result = cursor.fetchone()
 
     return result[0]

@@ -1,8 +1,8 @@
-from fastapi import HTTPException
-from app.db.database import test_connection
-
-from fastapi import FastAPI
+import psycopg
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.db.database import test_connection
 
 app = FastAPI(
     title="RagTrace API",
@@ -40,8 +40,8 @@ def database_health():
             "version": version
         }
 
-    except Exception as error:
+    except psycopg.Error:
         raise HTTPException(
             status_code=503,
-            detail=f"Database connection failed: {str(error)}"
+            detail="Database connection failed."
         )
