@@ -1,0 +1,26 @@
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: ragtrace-db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: ragtrace
+      POSTGRES_PASSWORD: ragtrace_dev_password
+      POSTGRES_DB: ragtrace
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - ragtrace_postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ragtrace -d ragtrace"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  ragtrace_postgres_data:
