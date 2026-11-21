@@ -2,12 +2,19 @@ import psycopg
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.routes.documents import router as documents_router
 from app.db.database import test_connection
 
 app = FastAPI(
     title="RagTrace API",
     description="AI-powered document research assistant",
     version="1.0.0"
+)
+
+app.include_router(
+    documents_router,
+    prefix="/documents",
+    tags=["documents"],
 )
 
 app.add_middleware(
